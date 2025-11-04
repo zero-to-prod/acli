@@ -1,14 +1,14 @@
 {
-  "name": "zero-to-prod/:slug",
-  "description": ":description",
+  "name": "zero-to-prod/acli",
+  "description": "A Containerized Wrapper for Atlassian CLI (ACLI)",
   "license": "MIT",
   "type": "library",
   "keywords": [
     "zero-to-prod",
-    ":slug"
+    "acli"
   ],
   "readme": "./README.md",
-  "time": ":time",
+  "time": "2025-11-04",
   "authors": [
     {
       "name": "David Smith",
@@ -17,13 +17,13 @@
       "role": "maintainer"
     }
   ],
-  "homepage": "https://github.com/zero-to-prod/:slug",
+  "homepage": "https://github.com/zero-to-prod/acli",
   "support": {
     "email": "dave0016@gmail.com",
-    "issues": "https://github.com/zero-to-prod/:slug/issues",
-    "source": "https://github.com/zero-to-prod/:slug",
-    "docs": "https://zero-to-prod.github.io/:slug/",
-    "security": "https://github.com/zero-to-prod/:slug/blob/main/SECURITY.md"
+    "issues": "https://github.com/zero-to-prod/acli/issues",
+    "source": "https://github.com/zero-to-prod/acli",
+    "docs": "https://zero-to-prod.github.io/acli/",
+    "security": "https://github.com/zero-to-prod/acli/blob/main/SECURITY.md"
   },
   "funding": [
     {
@@ -40,11 +40,11 @@
   },
   "autoload": {
     "psr-4": {
-      "Zerotoprod\\:namespace\\": "src/"
+      "Zerotoprod\\Zerotoprod\Acli\\": "src/"
     }
   },
   "bin": [
-    "bin/:slug"
+    "bin/acli"
   ],
   "require-dev": {
     "phpunit/phpunit": "<12.0"

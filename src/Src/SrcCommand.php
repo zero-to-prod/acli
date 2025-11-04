@@ -1,6 +1,6 @@
 <?php
 
-namespace Zerotoprod\:namespace\Src;
+namespace Zerotoprod\Zerotoprod\Acli\Src;
 
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -12,7 +12,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Project source link
  *
- * @link https://github.com/zero-to-prod/:slug
+ * @link https://github.com/zero-to-prod/acli
  */
 #[AsCommand(
     name: SrcCommand::signature,
@@ -21,13 +21,13 @@ use Symfony\Component\Console\Output\OutputInterface;
 class SrcCommand extends Command
 {
     /**
-     * @link https://github.com/zero-to-prod/:slug
+     * @link https://github.com/zero-to-prod/acli
      */
-    public const signature = ':slug:src';
+    public const signature = 'acli:src';
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $output->writeln('https://github.com/zero-to-prod/:slug');
+        $output->writeln('https://github.com/zero-to-prod/acli');
 
         return Command::SUCCESS;
     }

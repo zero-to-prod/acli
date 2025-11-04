@@ -1,27 +1,13 @@
 services:
-  php8.2:
+  acli:
+    build: .
     volumes:
-      - ./:/app:delegated
-      - ./.vendor/php8.2:/app/vendor
-    build:
-      context: ./docker/8.2
-      target: base
+      - ~/.config/acli:/root/.config/acli
+    working_dir: /app
+    entrypoint: ["acli"]
 
-  debug8.2:
-    extends:
-      service: php8.2
+  app:
+    build: .
     volumes:
-      - ./:/app:delegated
-      - ./docker/8.2:/usr/local/etc/php
-      - ./.vendor/php8.2:/app/vendor
-    build:
-      target: debug
-
-  composer8.2:
-    extends:
-      service: php8.2
-    volumes:
-      - ./:/app:delegated
-      - ./.vendor/php8.2:/app/vendor
-    build:
-      target: composer
+      - ~/.config/acli:/root/.config/acli
+    working_dir: /app
