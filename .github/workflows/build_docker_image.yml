@@ -38,8 +38,8 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: true
           tags: |
-            davidsmith3/:slug:latest
-            davidsmith3/:slug:${{ env.VERSION }}
+            davidsmith3/acli:latest
+            davidsmith3/acli:${{ env.VERSION }}
           build-args: |
             NODE_ENV=production
           labels: |
@@ -50,7 +50,7 @@ jobs:
       - name: Scan for vulnerabilities
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref: 'davidsmith3/:slug:${{ env.VERSION }}'
+          image-ref: 'davidsmith3/acli:${{ env.VERSION }}'
           format: 'table'
           exit-code: '1'
           ignore-unfixed: true
