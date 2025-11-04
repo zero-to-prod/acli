@@ -16,39 +16,13 @@
 ## Contents
 
 - [Introduction](#introduction)
-- [Requirements](#requirements)
-- [Installation](#installation)
-- [Usage](#usage)
 - [Docker Image](#docker-image)
-- [Local Development](./LOCAL_DEVELOPMENT.md)
 - [Image Development](./IMAGE_DEVELOPMENT.md)
 - [Contributing](#contributing)
 
 ## Introduction
 
-A Contanerized Wrapper for Atlassian CLI (ACLI)
-
-## Requirements
-
-- PHP 8.1 or higher.
-
-## Installation
-
-Install `Zerotoprod\Zerotoprod\Acli` via [Composer](https://getcomposer.org/):
-
-```bash
-composer require zero-to-prod/acli
-```
-
-This will add the package to your project’s dependencies and create an autoloader entry for it.
-
-## Usage
-
-Run this command to see the available commands:
-
-```shell
-vendor/bin/acli list
-```
+A Containerized Wrapper for Atlassian CLI (ACLI)
 
 ## Docker Image
 
