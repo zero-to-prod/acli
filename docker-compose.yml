@@ -5,9 +5,4 @@ services:
       - ~/.config/acli:/root/.config/acli
     working_dir: /app
     entrypoint: ["acli"]
-
-  app:
-    build: .
-    volumes:
-      - ~/.config/acli:/root/.config/acli
-    working_dir: /app
+    command: ["--help"]

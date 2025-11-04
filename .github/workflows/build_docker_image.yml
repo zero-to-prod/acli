@@ -43,9 +43,17 @@ jobs:
           build-args: |
             NODE_ENV=production
           labels: |
+            org.opencontainers.image.title=ACLI - Atlassian CLI
+            org.opencontainers.image.description=Containerized wrapper for Atlassian CLI (ACLI)
+            org.opencontainers.image.url=${{ github.event.repository.html_url }}
+            org.opencontainers.image.documentation=https://developer.atlassian.com/cloud/acli/
             org.opencontainers.image.source=${{ github.event.repository.html_url }}
+            org.opencontainers.image.version=${{ env.VERSION }}
             org.opencontainers.image.revision=${{ github.sha }}
             org.opencontainers.image.created=${{ github.event.repository.updated_at }}
+            org.opencontainers.image.vendor=ZeroToProd
+            org.opencontainers.image.licenses=MIT
+            usage=docker run -it --rm -v ~/.config/acli:/root/.config/acli davidsmith3/acli [COMMAND] [OPTIONS]
 
       - name: Scan for vulnerabilities
         uses: aquasecurity/trivy-action@master
