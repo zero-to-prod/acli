@@ -9,7 +9,7 @@
 
 ## Introduction
 
-A Containerized Wrapper for [Atlassian CLI](https://developer.atlassian.com/cloud/acli/reference/commands/) (ACLI)
+A Containerized Wrapper for [Atlassian CLI](https://developer.atlassian.com/cloud/acli/reference/commands/) (ACLI).
 
 ## Docker Image
 
