@@ -34,7 +34,7 @@ docker run -it --rm -v ~/.config/acli:/root/.config/acli davidsmith3/acli [COMMA
 Example - Get a Jira issue:
 
 ```shell
-docker run -it --rm -v ~/.config/acli:/root/.config/acli davidsmith3/acli jira workitem show ISSUE-123
+docker run -it --rm -v ~/.config/acli:/root/.config/acli davidsmith3/acli jira workitem view ISSUE-123
 ```
 
 ## Contributing
