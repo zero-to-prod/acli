@@ -88,10 +88,11 @@ jobs:
 
       - name: Update Docker Hub description
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        continue-on-error: true
         uses: peter-evans/dockerhub-description@v5
         with:
           username: davidsmith3
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
-          repository: ${{ env.IMAGE_NAME }}
+          repository: peterevans/dockerhub-description
           short-description: "Secure Docker wrapper for Atlassian CLI (ACLI)"
           readme-filepath: ./README.md
