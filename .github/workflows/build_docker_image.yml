@@ -107,3 +107,12 @@ jobs:
           ignore-unfixed: true
           vuln-type: 'os,library'
           severity: 'CRITICAL,HIGH'
+
+      - name: Update Docker Hub description
+        uses: peter-evans/dockerhub-description@v5
+        with:
+          username: davidsmith3
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+          repository: davidsmith3/acli:latest
+          short-description: "Secure Docker wrapper for Atlassian CLI (ACLI)"
+          readme-filepath: ./README.md
