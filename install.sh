@@ -110,10 +110,25 @@ prompt_user() {
     if [ "${AUTO_YES}" = true ]; then
         return 0
     fi
+
+    # Check if we have an interactive terminal
+    if [ ! -t 0 ]; then
+        # stdin is not a terminal (likely piped from curl)
+        echo "$1[skipping in non-interactive mode]"
+        return 1
+    fi
+
+    # We have a terminal, try to read from it
     echo -n "$1"
-    read -r response </dev/tty
+    if command -v timeout > /dev/null 2>&1; then
+        # Use timeout to avoid hanging
+        timeout 0.1 read -r response 2>/dev/null || response=""
+    else
+        read -r response 2>/dev/null || response=""
+    fi
+
     # POSIX-compliant pattern matching
-    case "$response" in
+    case "${response:-}" in
         [yY]|[yY][eE][sS]) return 0 ;;
         *) return 1 ;;
     esac
