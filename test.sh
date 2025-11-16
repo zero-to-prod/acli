@@ -23,12 +23,12 @@ print_test() {
 
 print_pass() {
     echo -e "  ${GREEN}✅ PASS${NC} $1"
-    TESTS_PASSED=$((TESTS_PASSED + 1))
+    ((TESTS_PASSED++))
 }
 
 print_fail() {
     echo -e "  ${RED}❌ FAIL${NC} $1"
-    TESTS_FAILED=$((TESTS_FAILED + 1))
+    ((TESTS_FAILED++))
 }
 
 print_warn() {
@@ -60,8 +60,7 @@ fi
 
 # Test 2: Help command
 print_test "2" "Testing --help command..."
-HELP_OUTPUT=$(docker run --rm "${IMAGE}" --help 2>&1 || true)
-if echo "${HELP_OUTPUT}" | grep -qi "atlassian\|acli\|jira"; then
+if docker run --rm "${IMAGE}" --help 2>&1 | grep -qi "atlassian\|acli\|jira"; then
     print_pass "Help command works"
 else
     print_fail "Help command failed or output unexpected"
@@ -69,9 +68,8 @@ fi
 
 # Test 3: Version command
 print_test "3" "Testing --version command..."
-VERSION_OUTPUT=$(docker run --rm "${IMAGE}" --version 2>&1 || true)
-if [ -n "${VERSION_OUTPUT}" ]; then
-    VERSION=$(echo "${VERSION_OUTPUT}" | head -n 1)
+if docker run --rm "${IMAGE}" --version > /dev/null 2>&1; then
+    VERSION=$(docker run --rm "${IMAGE}" --version 2>&1 | head -n 1)
     print_pass "Version command works: ${VERSION}"
 else
     print_warn "Version command not available (may not be supported by ACLI)"
@@ -131,8 +129,7 @@ fi
 # Test 9: Config directory mount test
 print_test "9" "Testing config directory mount..."
 TEMP_DIR=$(mktemp -d)
-MOUNT_OUTPUT=$(docker run --rm -v "${TEMP_DIR}:/test" "${IMAGE}" ls /test 2>&1 || true)
-if [ $? -eq 0 ] || [ -n "${MOUNT_OUTPUT}" ]; then
+if docker run --rm -v "${TEMP_DIR}:/test" "${IMAGE}" ls /test > /dev/null 2>&1; then
     print_pass "Volume mounting works"
 else
     print_fail "Volume mounting failed"
@@ -141,8 +138,7 @@ rm -rf "${TEMP_DIR}"
 
 # Test 10: Invalid command handling
 print_test "10" "Testing error handling..."
-ERROR_OUTPUT=$(docker run --rm "${IMAGE}" invalid-command 2>&1 || true)
-if echo "${ERROR_OUTPUT}" | grep -qi "error\|invalid\|unknown"; then
+if docker run --rm "${IMAGE}" invalid-command 2>&1 | grep -qi "error\|invalid\|unknown"; then
     print_pass "Error handling works correctly"
 else
     print_warn "Error handling may need improvement"
