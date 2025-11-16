@@ -113,6 +113,6 @@ jobs:
         with:
           username: davidsmith3
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
-          repository: davidsmith3/acli:latest
+          repository: davidsmith3/acli:${{ env.VERSION }}
           short-description: "Secure Docker wrapper for Atlassian CLI (ACLI)"
           readme-filepath: ./README.md
