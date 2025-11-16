@@ -4,10 +4,6 @@
 changelog:
   exclude:
     labels:
-      - ignore-for-release
-      - dependencies
-      - duplicate
-      - invalid
       - wontfix
     authors:
       - dependabot
@@ -16,37 +12,19 @@ changelog:
   categories:
     - title: Features
       labels:
-        - feature
         - enhancement
-        - feat
 
     - title: Bug Fixes
       labels:
         - bug
-        - fix
-        - bugfix
 
     - title: Documentation
       labels:
         - documentation
-        - docs
 
     - title: Maintenance & Chores
       labels:
-        - chore
         - maintenance
-        - refactor
-        - ci
-        - workflow
-
-    - title: Security
-      labels:
-        - security
-
-    - title: Performance
-      labels:
-        - performance
-        - perf
 
     - title: Other Changes
       labels:
