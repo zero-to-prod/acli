@@ -29,6 +29,14 @@ A lightweight, containerized wrapper for [Atlassian CLI](https://developer.atlas
 
 ## Quick Start
 
+### One-Line Install (Recommended)
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/zero-to-prod/acli/main/install.sh | bash
+```
+
+### Manual Setup
+
 ```bash
 # Pull the image
 docker pull davidsmith3/acli:latest
