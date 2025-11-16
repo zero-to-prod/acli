@@ -1,4 +1,4 @@
-FROM alpine/curl
+FROM alpine/curl:8.11.1@sha256:ebac6bef33fe8c0374533b8c0a55de25ac3dfa17f42f2ef11b92be1a5b3dfa09
 
 WORKDIR /app
 
