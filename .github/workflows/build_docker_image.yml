@@ -16,21 +16,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-        timeout-minutes: 1
-
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
-        timeout-minutes: 1
-
-      - name: Login to DockerHub
-        uses: docker/login-action@v3
-        timeout-minutes: 1
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_PASSWORD }}
-
       - name: Get version
         id: get_version
         run: |
@@ -41,21 +26,24 @@ jobs:
           echo "VERSION=$VERSION" >> $GITHUB_ENV
           echo "MAJOR_MINOR=$MAJOR_MINOR" >> $GITHUB_ENV
 
-      - name: Build and push
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+        timeout-minutes: 1
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+        timeout-minutes: 1
+
+      - name: Build test image (amd64 only)
         uses: docker/build-push-action@v6
         timeout-minutes: 2
         with:
           context: .
-          platforms: linux/amd64,linux/arm64
-          push: true
+          platforms: linux/amd64
+          push: false
+          load: true
           cache-from: type=gha
-          cache-to: type=gha,mode=max
-          tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/acli:latest
-            ${{ secrets.DOCKERHUB_USERNAME }}/acli:${{ env.VERSION }}
-            ${{ secrets.DOCKERHUB_USERNAME }}/acli:${{ env.MAJOR_MINOR }}
-          build-args: |
-            NODE_ENV=production
+          tags: acli:test
           labels: |
             org.opencontainers.image.title=ACLI - Atlassian CLI
             org.opencontainers.image.description=Containerized wrapper for Atlassian CLI (ACLI)
@@ -69,20 +57,53 @@ jobs:
             org.opencontainers.image.licenses=MIT
             usage=docker run -it --rm -v ~/.config/acli:/root/.config/acli davidsmith3/acli [COMMAND] [OPTIONS]
 
-      - name: Test image
+      - name: Test image functionality
         timeout-minutes: 1
         run: |
           echo "Testing image functionality..."
-          docker run --rm ${{ secrets.DOCKERHUB_USERNAME }}/acli:${{ env.VERSION }} --version || docker run --rm ${{ secrets.DOCKERHUB_USERNAME }}/acli:${{ env.VERSION }} --help
+          docker run --rm acli:test --version || docker run --rm acli:test --help
           echo "Image test completed successfully"
 
       - name: Scan for vulnerabilities
         uses: aquasecurity/trivy-action@master
         timeout-minutes: 2
         with:
-          image-ref: '${{ secrets.DOCKERHUB_USERNAME }}/acli:${{ env.VERSION }}'
+          image-ref: 'acli:test'
           format: 'table'
           exit-code: '1'
           ignore-unfixed: true
           vuln-type: 'os,library'
           severity: 'CRITICAL,HIGH'
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v3
+        timeout-minutes: 1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+      - name: Build and push multi-platform
+        uses: docker/build-push-action@v6
+        timeout-minutes: 3
+        with:
+          context: .
+          platforms: linux/amd64,linux/arm64
+          push: true
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          tags: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/acli:latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/acli:${{ env.VERSION }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/acli:${{ env.MAJOR_MINOR }}
+          labels: |
+            org.opencontainers.image.title=ACLI - Atlassian CLI
+            org.opencontainers.image.description=Containerized wrapper for Atlassian CLI (ACLI)
+            org.opencontainers.image.url=${{ github.event.repository.html_url }}
+            org.opencontainers.image.documentation=https://developer.atlassian.com/cloud/acli/
+            org.opencontainers.image.source=${{ github.event.repository.html_url }}
+            org.opencontainers.image.version=${{ env.VERSION }}
+            org.opencontainers.image.revision=${{ github.sha }}
+            org.opencontainers.image.created=${{ github.event.repository.updated_at }}
+            org.opencontainers.image.vendor=ZeroToProd
+            org.opencontainers.image.licenses=MIT
+            usage=docker run -it --rm -v ~/.config/acli:/root/.config/acli davidsmith3/acli [COMMAND] [OPTIONS]
