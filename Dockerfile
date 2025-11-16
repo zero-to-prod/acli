@@ -1,5 +1,7 @@
 FROM alpine/curl:8.11.1
 
+RUN apk upgrade --no-cache
+
 WORKDIR /app
 
 RUN curl -LO "https://acli.atlassian.com/linux/latest/acli_linux_amd64/acli"
