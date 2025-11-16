@@ -17,19 +17,19 @@ WRAPPER_NAME="acli"
 
 # Function to print colored output
 print_info() {
-    echo -e "${GREEN}[INFO]${NC} $1"
+    echo -e "${GREEN}➜${NC} $1"
 }
 
 print_warn() {
-    echo -e "${YELLOW}[WARN]${NC} $1"
+    echo -e "${YELLOW}⚠${NC} $1"
 }
 
 print_error() {
-    echo -e "${RED}[ERROR]${NC} $1"
+    echo -e "${RED}✗${NC} $1"
 }
 
 print_success() {
-    echo -e "${GREEN}[SUCCESS]${NC} $1"
+    echo -e "${GREEN}✓${NC} $1"
 }
 
 # Check if Docker is installed
@@ -151,33 +151,18 @@ main() {
 
     check_docker
 
-    # Check if running interactively or via pipe
-    local method="${1:-}"
-
-    if [[ -z "$method" ]]; then
-        if [[ -t 0 ]]; then
-            # Interactive mode - stdin is a terminal
-            echo ""
-            echo "Choose installation method:"
-            echo "  1) Install wrapper script to ${INSTALL_DIR} (recommended)"
-            echo "  2) Add shell function to your shell RC file"
-            echo "  3) Pull Docker image only"
-            echo ""
-
-            read -p "Enter choice [1-3]: " -n 1 -r
-            echo ""
-            echo ""
-            method=$REPLY
-        else
-            # Non-interactive mode (piped) - use recommended default
-            print_info "Non-interactive mode detected, using recommended method (wrapper script)"
-            method=1
-        fi
-    fi
-
+    echo ""
+    echo "Choose installation method:"
+    echo "  1) Install wrapper script to ${INSTALL_DIR} (recommended)"
+    echo "  2) Add shell function to your shell RC file"
+    echo "  3) Pull Docker image only"
     echo ""
 
-    case $method in
+    read -p "Enter choice [1-3]: " -n 1 -r
+    echo ""
+    echo ""
+
+    case $REPLY in
         1)
             install_wrapper
             ;;
@@ -190,8 +175,7 @@ main() {
             print_info "Use: docker run --rm davidsmith3/acli --help"
             ;;
         *)
-            print_error "Invalid choice: $method"
-            print_info "Usage: $0 [1|2|3]"
+            print_error "Invalid choice"
             exit 1
             ;;
     esac

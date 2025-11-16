@@ -22,21 +22,21 @@ print_test() {
 }
 
 print_pass() {
-    echo -e "  ${GREEN}[PASS]${NC} $1"
+    echo -e "  ${GREEN}✅ PASS${NC} $1"
     TESTS_PASSED=$((TESTS_PASSED + 1))
 }
 
 print_fail() {
-    echo -e "  ${RED}[FAIL]${NC} $1"
+    echo -e "  ${RED}❌ FAIL${NC} $1"
     TESTS_FAILED=$((TESTS_FAILED + 1))
 }
 
 print_warn() {
-    echo -e "  ${YELLOW}[WARN]${NC} $1"
+    echo -e "  ${YELLOW}⚠️  WARN${NC} $1"
 }
 
 print_info() {
-    echo -e "  ${BLUE}[INFO]${NC} $1"
+    echo -e "  ${BLUE}ℹ${NC}  $1"
 }
 
 # Header
@@ -163,6 +163,6 @@ if [ "${TESTS_FAILED}" -gt 0 ]; then
     exit 1
 else
     echo ""
-    echo -e "${GREEN}All tests passed successfully!${NC}"
+    echo -e "${GREEN}✓ All tests passed successfully!${NC}"
     exit 0
 fi
