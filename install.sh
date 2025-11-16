@@ -111,7 +111,7 @@ prompt_user() {
         return 0
     fi
     echo -n "$1"
-    read -r response
+    read -r response </dev/tty
     # POSIX-compliant pattern matching
     case "$response" in
         [yY]|[yY][eE][sS]) return 0 ;;
