@@ -107,3 +107,14 @@ jobs:
             org.opencontainers.image.vendor=ZeroToProd
             org.opencontainers.image.licenses=MIT
             usage=docker run -it --rm -v ~/.config/acli:/root/.config/acli davidsmith3/acli [COMMAND] [OPTIONS]
+
+      - name: Update Docker Hub description
+        if: success()
+        continue-on-error: true
+        uses: peter-evans/dockerhub-description@v5
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+          repository: davidsmith3/acli
+          short-description: "Containerized wrapper for Atlassian CLI (ACLI)"
+          readme-filepath: ./README.md
