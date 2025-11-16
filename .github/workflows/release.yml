@@ -12,49 +12,43 @@ jobs:
   release:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - name: Checkout repository
+        uses: actions/checkout@v5
         with:
-          fetch-depth: 0
+          fetch-depth: 50
 
-      - name: Check for Backwards Compatibility Breaks
-        id: bc_check
-        run: |
-          docker run --rm -v "${GITHUB_WORKSPACE}":/app -w /app nyholm/roave-bc-check-ga || 
-          echo "bc_breaks=true" >> $GITHUB_OUTPUT
-
-      - name: Validate version against Backwards Compatibility Breaks
+      - name: Validate semantic version format
+        timeout-minutes: 1
+        id: version
         run: |
           TAG=${GITHUB_REF#refs/tags/v}
 
-          if ! [[ $TAG =~ ^([0-9]+)\.([0-9]+)\.([0-9]+) ]]; then
-            echo "Invalid semver format"
+          # Full semver validation with optional prerelease and build metadata
+          if ! [[ $TAG =~ ^([0-9]+)\.([0-9]+)\.([0-9]+)(-[0-9A-Za-z.-]+)?(\+[0-9A-Za-z.-]+)?$ ]]; then
+            echo "ERROR: Invalid semantic version format: $TAG"
+            echo "Expected format: v1.2.3 or v1.2.3-alpha.1 or v1.2.3+build.1"
             exit 1
           fi
 
-          if [[ "${{ steps.bc_check.outputs.bc_breaks }}" == "true" ]]; then
-            PREV_TAG=$(git describe --tags --abbrev=0 HEAD^ 2>/dev/null || echo 'v0.0.0')
-            PREV_MAJOR=${PREV_TAG#v} | cut -d'.' -f1
-          
-            if [ "${BASH_REMATCH[1]}" -le "$PREV_MAJOR" ]; then
-              echo "Breaking changes require major version bump"
-              exit 1
-            fi
+          # Detect prerelease (versions with hyphen suffix like alpha, beta, rc)
+          if [[ $TAG =~ ^[0-9]+\.[0-9]+\.[0-9]+- ]]; then
+            PRERELEASE="true"
+            echo "✓ Detected prerelease version: $TAG"
+          else
+            PRERELEASE="false"
+            echo "✓ Detected stable release version: $TAG"
           fi
 
-      - name: Generate Release Notes
-        env:
-          GH_TOKEN: ${{ github.token }}
-          REPO: ${{ github.repository }}
-        run: |
-          PREV_TAG=$(git describe --tags --abbrev=0 HEAD^ 2>/dev/null || echo '')
-          SINCE_DATE=$(git log -1 --format=%aI $PREV_TAG)
-          
-          gh pr list --base main --state merged --json title,number,author \
-            --search "merged:>=$SINCE_DATE" | \
-          jq -r '.[] | "- \(.title) by @\(.author.login) in #\(.number)"' > RELEASE_NOTES.md
+          # Export for use in later steps
+          echo "VERSION=$TAG" >> $GITHUB_ENV
+          echo "PRERELEASE=$PRERELEASE" >> $GITHUB_ENV
+          echo "version=$TAG" >> $GITHUB_OUTPUT
+          echo "prerelease=$PRERELEASE" >> $GITHUB_OUTPUT
 
-          git log --pretty=format:"- %s by %an in %H" $PREV_TAG..HEAD --no-merges >> RELEASE_NOTES.md
-      - uses: softprops/action-gh-release@v2
-        if: ${{ !steps.bc_check.outputs.bc_breaks }}
+      - name: Create GitHub release
+        timeout-minutes: 2
+        uses: softprops/action-gh-release@v2
         with:
-          body_path: RELEASE_NOTES.md
+          generate_release_notes: true
+          draft: false
+          prerelease: ${{ env.PRERELEASE }}

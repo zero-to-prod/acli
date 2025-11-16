@@ -21,7 +21,7 @@ A lightweight, containerized wrapper for [Atlassian CLI](https://developer.atlas
 - [Usage](#usage)
   - [Basic Commands](#basic-command-structure)
   - [Common Use Cases](#common-use-cases)
-  - [Shell Aliases](#creating-shell-aliases-optional)
+  - [Shell Aliases](#creating-shell-aliases)
 - [Image Information](#image-information)
 - [Development](#development)
 - [Contributing](#contributing)
@@ -38,6 +38,14 @@ docker run -it --rm -v ~/.config/acli:/root/.config/acli davidsmith3/acli jira a
 
 # Run a command (example: view a Jira issue)
 docker run -it --rm -v ~/.config/acli:/root/.config/acli davidsmith3/acli jira workitem view PROJ-123
+```
+
+### Creating Shell Aliases
+
+For convenience, create an alias in your shell configuration (`.bashrc`, `.zshrc`):
+
+```bash
+alias acli='docker run -it --rm -v ~/.config/acli:/root/.config/acli -v $(pwd):/workspace -w /workspace davidsmith3/acli'
 ```
 
 ## Prerequisites
@@ -204,14 +212,6 @@ docker run -it --rm -v ~/.config/acli:/root/.config/acli davidsmith3/acli jira w
 docker run -it --rm -v ~/.config/acli:/root/.config/acli davidsmith3/acli jira workitem transition \
   PROJ-123 \
   --name "In Progress"
-```
-
-### Creating Shell Aliases (Optional)
-
-For convenience, create an alias in your shell configuration (`.bashrc`, `.zshrc`):
-
-```bash
-alias acli='docker run -it --rm -v ~/.config/acli:/root/.config/acli -v $(pwd):/workspace -w /workspace davidsmith3/acli'
 ```
 
 After adding the alias, restart your shell or run `source ~/.bashrc`. Then you can use:
