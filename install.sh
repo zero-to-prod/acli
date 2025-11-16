@@ -2,21 +2,17 @@
 
 set -eu
 
-# ACLI Installer Script
 # Usage: curl -fsSL https://raw.githubusercontent.com/zero-to-prod/acli/main/install.sh | bash
 
-# Configuration
 DOCKER_IMAGE="davidsmith3/acli:latest"
 CONFIG_DIR="${HOME}/.config/acli"
 
-# Colors
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 NC='\033[0m'
 
 error() { echo -e "${RED}✗${NC} $1"; }
 
-# Check Docker
 if ! command -v docker > /dev/null 2>&1; then
     error "Docker is not installed."
     echo ""
@@ -31,17 +27,14 @@ if ! docker info > /dev/null 2>&1; then
     exit 1
 fi
 
-# Pull image
 echo "Pulling Docker image..."
 docker pull "${DOCKER_IMAGE}" || { error "Failed to pull Docker image"; exit 1; }
 
-# Create config directory
 mkdir -p "${CONFIG_DIR}"
 chmod 700 "${CONFIG_DIR}"
 
-# Success
 echo ""
-echo "✓ Installation complete!"
+echo "Installation complete!"
 echo ""
 echo "Next steps:"
 echo ""
