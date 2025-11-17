@@ -14,6 +14,7 @@ Using this wrapper:
 - Zero-configuration global installation
 - Does not require special instructions for LLMs to use since it's just a CLI
 - Use it to compose powerful scripts without the need for an MCP integration
+- More complete feature set than the Jira MCP
 
 ## Contents
 
