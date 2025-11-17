@@ -7,7 +7,13 @@
 
 A lightweight, containerized wrapper for [Atlassian CLI](https://developer.atlassian.com/cloud/acli/reference/commands/) (ACLI) that simplifies Jira Cloud operations through Docker.
 
-> **Note**: This wrapper currently focuses on Jira Cloud operations. Check the [official ACLI documentation](https://developer.atlassian.com/cloud/acli/) for the latest supported features and commands.
+Use it to download Jira issues and interact with Jira from the command line.
+
+Using this wrapper:
+- Provides an alternative to MCP: reducing time and consuming fewer tokens
+- Zero-configuration global installation
+- Does not require special instructions for LLMs to use since it's just a CLI
+- Use it to compose powerful scripts without the need for an MCP integration
 
 ## Contents
 
@@ -29,10 +35,19 @@ A lightweight, containerized wrapper for [Atlassian CLI](https://developer.atlas
 
 ## Quick Start
 
-### One-Line Install (Recommended)
+1. One-Line Install
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/zero-to-prod/acli/main/install.sh | bash
+```
+
+2. Alias (Recommended)
+Since this package is a Docker wrapper, an LLM should need no specific instructions to use the underlying CLI.
+
+Adding an alias makes the wrapper transparent, allowing it to be used naturally.
+
+```bash
+alias acli='docker run -it --rm -v ~/.config/acli:/root/.config/acli -v $(pwd):/workspace -w /workspace davidsmith3/acli'
 ```
 
 ### Manual Setup
