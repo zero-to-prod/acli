@@ -41,13 +41,35 @@ Using this wrapper:
 curl -fsSL https://raw.githubusercontent.com/zero-to-prod/acli/main/install.sh | bash
 ```
 
-2. Alias (Recommended)
+2. Authenticate:
+
+Get a token from https://id.atlassian.com/manage-profile/security/api-tokens
+
+```bash
+docker run -it --rm -v ~/.config/acli:/root/.config/acli davidsmith3/acli:latest jira auth login
+```
+
+3. View an issue:
+
+```bash
+docker run -it --rm -v ~/.config/acli:/root/.config/acli davidsmith3/acli jira workitem view PROJ-123
+```
+
+4. Alias (Recommended)
 Since this package is a Docker wrapper, an LLM should need no specific instructions to use the underlying CLI.
 
 Adding an alias makes the wrapper transparent, allowing it to be used naturally.
 
 ```bash
 alias acli='docker run -it --rm -v ~/.config/acli:/root/.config/acli -v $(pwd):/workspace -w /workspace davidsmith3/acli'
+```
+
+5. Run Directly (Optional)
+
+Use this to run in non-interactive contexts such as CI/CD pipelines, scripts, or other automation.
+
+```shell
+docker run --rm -v ~/.config/acli:/root/.config/acli -v $(pwd):/workspace -w /workspace davidsmith3/acli jira workitem view [ISSUE_KEY]
 ```
 
 ### Manual Setup
